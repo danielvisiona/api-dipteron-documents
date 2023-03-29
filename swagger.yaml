@@ -1,24 +1,321 @@
-openapi: 3.0.0
+swagger: "2.0"
 info:
-  title: Sample API
-  description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
-  version: 0.1.9
-servers:
-  - url: http://api.example.com/v1
-    description: Optional server description, e.g. Main (production) server
-  - url: http://staging-api.example.com
-    description: Optional server description, e.g. Internal staging server for testing
+  description: "This is a server Cadastrol-Server.  You can find out more about     Cadastrol-Server at [Cadastrol-Server](https://github.com/BureauTech/Cadastrol-Server/tree/dev)."
+  version: "1.0.0"
+  title: "BureauTech - API's"
+  termsOfService: ""
+  contact:
+    email: "bureautech@gmail.com"
+  license:
+    name: "MIT License"
+    url: "https://github.com/BureauTech/Cadastrol-Server-API-Docs/blob/main/LICENSE"
+host: "localhost:8080"
+basePath: "/api/v1"
+tags:
+- name: "authentication"
+- name: "user"
+  description: "Everything about Users"
+schemes:
+- "http"
 paths:
-  /users:
-    get:
-      summary: Returns a list of users.
-      description: Optional extended description in CommonMark or HTML.
+  /login:
+    post:
+      tags:
+      - "authentication"
+      summary: "User login"
+      description: "Provider User login"
+      operationId: "login"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Data User access"
+        required: true
+        schema:
+          $ref: "#/definitions/Login"
       responses:
-        '200':    # status code
-          description: A JSON array of user names
-          content:
-            application/json:
-              schema: 
-                type: array
-                items: 
-                  type: string
+        default:
+          description: "successful operation"
+  /logout:
+    get:
+      tags:
+      - "authentication"
+      summary: "User logout"
+      description: "Provider User logout"
+      operationId: "logout"
+      responses:
+        default:
+          description: "successful operation"
+  /user:
+    post:
+      tags:
+      - "user"
+      summary: "Create user"
+      description: "This can only be done by the logged in user"
+      operationId: "create"
+      produces:
+      - "application/json"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        default:
+          description: "successful operation"
+        200:
+          description: "successful operation"
+          schema:
+            properties:
+              statusCode:
+                type: "integer"
+                description: "Http status code."
+                example: 200
+              success:
+                type: "boolean"
+                description: "Flag success response."
+                example: true
+              data:
+                type: "object"
+                description: "Return an User."
+                example: {
+                  "useCod": 1,
+                  "useName": "Cadastrol",
+                  "useEmail": "cadastrol@cadastrol.com",
+                  "usePhone": "12 999887766"
+                }
+    get:
+      tags:
+      - "user"
+      summary: "Return a list with 10 users per page"
+      description: ""
+      operationId: "getAll"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "page"
+        type: integer
+        required: true
+        default: 0
+        description: "The offset number to return users, limit 10 values"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            properties:
+              statusCode:
+                type: "integer"
+                description: "Http status code."
+                example: 200
+              success:
+                type: "boolean"
+                description: "Flag success response."
+                example: true
+              data:
+                type: "object"
+                description: "Return an User list."
+                example: [{
+                    "useCod": 1,
+                    "useName": "Cadastrol",
+                    "useEmail": "cadastrol@cadastrol.com",
+                    "usePhone": "12 999887766"
+                  }, {
+                    "useCod": 2,
+                    "useName": "Client",
+                    "useEmail": "client@client.com",
+                    "usePhone": "12 955443322"
+                  }]
+  /user/{id}:
+    put:
+      tags:
+      - "user"
+      summary: "Update user"
+      description: "Update data to User"
+      operationId: "update"
+      produces:
+      - "application/json"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "id"
+        type: integer
+        required: true
+        description: "The User identifier"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            properties:
+              statusCode:
+                type: "integer"
+                description: "Http status code."
+                example: 200
+              success:
+                type: "boolean"
+                description: "Flag success response."
+                example: true
+              data:
+                type: "object"
+                description: "Return an User."
+                example: {
+                  "useCod": 1,
+                  "useName": "Cadastrol",
+                  "useEmail": "cadastrol@cadastrol.com",
+                  "usePhone": "12 999887766"
+                }
+        404:
+          description: "User not found in database."
+          schema:
+            properties:
+              statusCode:
+                type: "integer"
+                description: "Http status code."
+                example: 404
+              success:
+                type: "boolean"
+                description: "Flag success response."
+                example: false
+              error:
+                type: "string"
+                description: "Message response."
+                example: "User not found in database"
+    get:
+      tags:
+      - "user"
+      summary: "Get an User by id."
+      description: "Get a specify User by id."
+      operationId: "getUserById"
+      produces:
+      - "application/json"
+      parameters:
+        - in: "path"
+          name: "id"
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            properties:
+              statusCode:
+                type: "integer"
+                description: "Http status code."
+                example: 200
+              success:
+                type: "boolean"
+                description: "Flag success response."
+                example: true
+              data:
+                type: "object"
+                description: "Return an User."
+                example: {
+                  "useCod": 1,
+                  "useName": "Cadastrol",
+                  "useEmail": "cadastrol@cadastrol.com",
+                  "usePhone": "12 999887766"
+                }
+    delete:
+      tags:
+      - "user"
+      summary: "Delete a User by id"
+      description: "Delete a specify User by id"
+      operationId: "deleteUserById"
+      parameters:
+        - in: "path"
+          name: "id"
+          type: integer
+          required: true
+          description: "Numeric ID of the user to delete."
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            properties:
+              statusCode:
+                type: "integer"
+                description: "Http status code."
+                example: 200
+              success:
+                type: "boolean"
+                description: "Flag success response."
+                example: true
+              data:
+                type: "object"
+                description: "Return an User."
+                example: {
+                  "useCod": 1,
+                  "useName": "Cadastrol",
+                  "useEmail": "cadastrol@cadastrol.com",
+                  "usePhone": "12 999887766"
+                }
+        404:
+          description: "User not found in database."
+          schema:
+            properties:
+              statusCode:
+                type: "integer"
+                description: "Http status code."
+                example: 404
+              success:
+                type: "boolean"
+                description: "Flag success response."
+                example: false
+              error:
+                type: "string"
+                description: "Message response."
+                example: "User not found in database"
+definitions:
+  User:
+    type: "object"
+    properties:
+      useCod:
+        type: "integer"
+      useName:
+        type: "string"
+      useEmail:
+        type: "string"
+      usePhone:
+        type: "boolean"
+      usePassword:
+        type: "string"
+  SuccessResponse:
+    type: "object"
+    properties:
+      statusCode:
+        type: "integer"
+        description: "Http status code."
+      success:
+        type: "boolean"
+        description: "Flag success response."
+      data:
+        type: "object"
+        description: "Return a list Users or an one User."
+  ErrorResponse:
+    type: "object"
+    properties:
+      statusCode:
+        type: "integer"
+      success:
+        type: "boolean"
+      error:
+        type: "string"
+  Login:
+    type: "object"
+    properties:
+      useEmail:
+        type: "string"
+        example: "email@email.com"
+      usePassword:
+        type: "string"
+        example: "strongpassword"
+
+externalDocs:
+  description: "Find out more about Bureau Tech"
+  url: "https://github.com/BureauTech/Cadastrol-Server-API-Docs/"
