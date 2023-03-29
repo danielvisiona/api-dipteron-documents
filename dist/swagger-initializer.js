@@ -13,7 +13,10 @@ window.onload = function() {
     plugins: [
       SwaggerUIBundle.plugins.DownloadUrl
     ],
-    layout: "StandaloneLayout"
+    layout: "StandaloneLayout",
+    onComplete: function() {
+      ui.preauthorizeBasic("basicAuth", "username", "password");
+    }
   });
 
   //</editor-fold>

@@ -1,321 +1,162 @@
 swagger: "2.0"
+# Definições de segurança
+securityDefinitions:
+  basicAuth:
+    type: basic
+# Aplicação da segurança
+security:
+  - basicAuth: []
 info:
-  description: "This is a server Cadastrol-Server.  You can find out more about     Cadastrol-Server at [Cadastrol-Server](https://github.com/BureauTech/Cadastrol-Server/tree/dev)."
+  description: "Esta é a API Dipteron.  Você pode encontrar mais informações sobre em     Visiona - API Dipteron at [Visiona - API Dipteron](https://github.com/visiona-devteam/gcp-dipteron-api)."
   version: "1.0.0"
-  title: "BureauTech - API's"
+  title: "Visiona - API Dipteron"
   termsOfService: ""
   contact:
-    email: "bureautech@gmail.com"
+    email: "daniel.oliveira@visionaespacial.com.br"
   license:
     name: "MIT License"
-    url: "https://github.com/BureauTech/Cadastrol-Server-API-Docs/blob/main/LICENSE"
-host: "localhost:8080"
-basePath: "/api/v1"
+    url: "https://github.com/danielvisiona/api-dipteron-documents/blob/main/LICENSE"
+host: "localhost:5000"
+# basePath: "/"
 tags:
-- name: "authentication"
+- name: "area"
+  description: "Gerenciamento de Áreas"
+- name: "contrato"
+  description: "Gerenciamento de Contratos"
+- name: "servico"
+  description: "Serviços"
 - name: "user"
-  description: "Everything about Users"
+  description: "Gerenciamento de Usuários"
+- name: "municipio"
+  description: "Auxíliar - Cadastro de Áreas"
+- name: "estado"
+  description: "Auxíliar - Busca de Municípios"
+- name: "variavel"
+  description: "Auxíliar - Cadastro de Áreas"
+
 schemes:
 - "http"
 paths:
-  /login:
+# Áreas
+  /area/create:
     post:
       tags:
-      - "authentication"
-      summary: "User login"
-      description: "Provider User login"
+      - "area"
+      summary: "Área Criação"
+      description: "Criação de novas áreas"
       operationId: "login"
       consumes:
       - "application/json"
       parameters:
       - in: "body"
         name: "body"
-        description: "Data User access"
+        description: "Data Area create"
         required: true
         schema:
-          $ref: "#/definitions/Login"
+          $ref: "#/definitions/Area"
       responses:
         default:
           description: "successful operation"
-  /logout:
+  /area/read:
     get:
       tags:
-      - "authentication"
-      summary: "User logout"
-      description: "Provider User logout"
-      operationId: "logout"
-      responses:
-        default:
-          description: "successful operation"
-  /user:
-    post:
-      tags:
-      - "user"
-      summary: "Create user"
-      description: "This can only be done by the logged in user"
-      operationId: "create"
-      produces:
-      - "application/json"
+      - "area"
+      summary: "Área Criação"
+      description: "Criação de novas áreas"
+      operationId: "login"
       consumes:
       - "application/json"
       parameters:
       - in: "body"
         name: "body"
-        description: "Created user object"
+        description: "Data Area create"
         required: true
         schema:
-          $ref: "#/definitions/User"
+          $ref: "#/definitions/Area"
       responses:
         default:
           description: "successful operation"
-        200:
-          description: "successful operation"
-          schema:
-            properties:
-              statusCode:
-                type: "integer"
-                description: "Http status code."
-                example: 200
-              success:
-                type: "boolean"
-                description: "Flag success response."
-                example: true
-              data:
-                type: "object"
-                description: "Return an User."
-                example: {
-                  "useCod": 1,
-                  "useName": "Cadastrol",
-                  "useEmail": "cadastrol@cadastrol.com",
-                  "usePhone": "12 999887766"
-                }
+# Municípios
+  /municipio/read:
+      get:
+        tags:
+        - "municipio"
+        summary: "Municípios do Brasil"
+        description: "Retornar os Municípios do Brasil para auxiliar cadastro das Áreas"
+        operationId: "municipio-read"
+        consumes:
+        - "application/json"
+        responses:
+          default:
+            description: "successful operation"
+  /municipio/read/{ibge_cd}:
+      get:
+        tags:
+        - "municipio"
+        summary: "Município do Brasil"
+        description: "Retornar um Município do Brasil para auxiliar cadastro das Áreas"
+        operationId: "municipio-read-ibge_cd"
+        consumes:
+        - "application/json"
+        parameters:
+        - in: "path"
+          name: "ibge_cd"
+          type: "integer"
+          required: True
+          description: "Código IBGE do Município"
+        responses:
+          default:
+            description: "successful operation"
+# Estados
+  /estado/read:
     get:
       tags:
-      - "user"
-      summary: "Return a list with 10 users per page"
-      description: ""
-      operationId: "getAll"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "query"
-        name: "page"
-        type: integer
-        required: true
-        default: 0
-        description: "The offset number to return users, limit 10 values"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            properties:
-              statusCode:
-                type: "integer"
-                description: "Http status code."
-                example: 200
-              success:
-                type: "boolean"
-                description: "Flag success response."
-                example: true
-              data:
-                type: "object"
-                description: "Return an User list."
-                example: [{
-                    "useCod": 1,
-                    "useName": "Cadastrol",
-                    "useEmail": "cadastrol@cadastrol.com",
-                    "usePhone": "12 999887766"
-                  }, {
-                    "useCod": 2,
-                    "useName": "Client",
-                    "useEmail": "client@client.com",
-                    "usePhone": "12 955443322"
-                  }]
-  /user/{id}:
-    put:
-      tags:
-      - "user"
-      summary: "Update user"
-      description: "Update data to User"
-      operationId: "update"
-      produces:
-      - "application/json"
+      - "estado"
+      summary: "Estados do Brasil"
+      description: "Retornar os Estados do Brasil para auxiliar na busca dos Municípios"
+      operationId: "estado-read"
       consumes:
       - "application/json"
-      parameters:
-      - in: "path"
-        name: "id"
-        type: integer
-        required: true
-        description: "The User identifier"
       responses:
-        200:
+        default:
           description: "successful operation"
-          schema:
-            properties:
-              statusCode:
-                type: "integer"
-                description: "Http status code."
-                example: 200
-              success:
-                type: "boolean"
-                description: "Flag success response."
-                example: true
-              data:
-                type: "object"
-                description: "Return an User."
-                example: {
-                  "useCod": 1,
-                  "useName": "Cadastrol",
-                  "useEmail": "cadastrol@cadastrol.com",
-                  "usePhone": "12 999887766"
-                }
-        404:
-          description: "User not found in database."
-          schema:
-            properties:
-              statusCode:
-                type: "integer"
-                description: "Http status code."
-                example: 404
-              success:
-                type: "boolean"
-                description: "Flag success response."
-                example: false
-              error:
-                type: "string"
-                description: "Message response."
-                example: "User not found in database"
+# Variáveis Meteorológicas
+  /variavel/read:
     get:
       tags:
-      - "user"
-      summary: "Get an User by id."
-      description: "Get a specify User by id."
-      operationId: "getUserById"
-      produces:
+      - "variavel"
+      summary: "Variáveis Meteorológicas"
+      description: "Retornar as Variáveis Meteorológicas para auxiliar no cadastro das áreas"
+      operationId: "variavel-read"
+      consumes:
       - "application/json"
-      parameters:
-        - in: "path"
-          name: "id"
-          required: true
-          type: integer
       responses:
-        200:
+        default:
           description: "successful operation"
-          schema:
-            properties:
-              statusCode:
-                type: "integer"
-                description: "Http status code."
-                example: 200
-              success:
-                type: "boolean"
-                description: "Flag success response."
-                example: true
-              data:
-                type: "object"
-                description: "Return an User."
-                example: {
-                  "useCod": 1,
-                  "useName": "Cadastrol",
-                  "useEmail": "cadastrol@cadastrol.com",
-                  "usePhone": "12 999887766"
-                }
-    delete:
-      tags:
-      - "user"
-      summary: "Delete a User by id"
-      description: "Delete a specify User by id"
-      operationId: "deleteUserById"
-      parameters:
-        - in: "path"
-          name: "id"
-          type: integer
-          required: true
-          description: "Numeric ID of the user to delete."
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            properties:
-              statusCode:
-                type: "integer"
-                description: "Http status code."
-                example: 200
-              success:
-                type: "boolean"
-                description: "Flag success response."
-                example: true
-              data:
-                type: "object"
-                description: "Return an User."
-                example: {
-                  "useCod": 1,
-                  "useName": "Cadastrol",
-                  "useEmail": "cadastrol@cadastrol.com",
-                  "usePhone": "12 999887766"
-                }
-        404:
-          description: "User not found in database."
-          schema:
-            properties:
-              statusCode:
-                type: "integer"
-                description: "Http status code."
-                example: 404
-              success:
-                type: "boolean"
-                description: "Flag success response."
-                example: false
-              error:
-                type: "string"
-                description: "Message response."
-                example: "User not found in database"
+
 definitions:
-  User:
+  Area:
     type: "object"
     properties:
-      useCod:
+      nome:
+        type: "string"
+        example: "Visiona - Campinas"
+      ibge_id:
         type: "integer"
-      useName:
-        type: "string"
-      useEmail:
-        type: "string"
-      usePhone:
-        type: "boolean"
-      usePassword:
-        type: "string"
-  SuccessResponse:
-    type: "object"
-    properties:
-      statusCode:
+        example: 3509502
+      contrato_id:
         type: "integer"
-        description: "Http status code."
-      success:
-        type: "boolean"
-        description: "Flag success response."
-      data:
-        type: "object"
-        description: "Return a list Users or an one User."
-  ErrorResponse:
-    type: "object"
-    properties:
-      statusCode:
-        type: "integer"
-      success:
-        type: "boolean"
-      error:
+        example: 1
+      variavel_meteorologica:
         type: "string"
-  Login:
-    type: "object"
-    properties:
-      useEmail:
-        type: "string"
-        example: "email@email.com"
-      usePassword:
-        type: "string"
-        example: "strongpassword"
+        description: "Definição da variável meteorológica - Pode ser duas ou mais separadas por vírgulas."
+        example: "LST_Night_1km,LST_Day_1km,EVI_MODIS,NDVI_MODIS,Evapo_MODIS,CHIRPS"
+    required:  
+      - nome
+      - ibge_id
+      - contrato_id
+      - variavel_meteorologica
 
 externalDocs:
-  description: "Find out more about Bureau Tech"
-  url: "https://github.com/BureauTech/Cadastrol-Server-API-Docs/"
+  description: "Saiba mais sobre"
+  url: "https://github.com/danielvisiona/api-dipteron-documents"
