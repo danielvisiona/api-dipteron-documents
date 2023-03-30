@@ -19,6 +19,9 @@ info:
 
 host: "localhost:5000"
 
+schemes:
+- "http"
+
 tags:
 - name: "area"
   description: "Gerenciamento de Áreas"
@@ -30,9 +33,6 @@ tags:
   description: "Gerenciamento de Usuários"
 - name: "auxiliar"
   description: "Métodos auxiliares para o cadastro e atualização de Contratos e Áreas"
-
-schemes:
-- "http"
 
 paths:
 # Áreas
@@ -126,6 +126,40 @@ paths:
       responses:
         default:
           description: "successful operation"
+  /area/admin/metadata/{area_id}/{image_date}/{variavel_meteorologica}/{file_name}":
+    get:
+      tags:
+      - "area"
+      summary: "Recuperar Metadados Imagem Administrador"
+      description: "Recuperar Metadados de uma Imagem para Usuários administradores"
+      operationId: "area-admin-metadata-read"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "area_id"
+        type: "string"
+        description: "Id da Área"
+        required: True
+      - in: "path"
+        name: "image_date"
+        type: "string"
+        description: "Data de processamento da imagem Ex.: {2010-10}"
+        required: True
+        format: date
+      - in: "path"
+        name: "variavel_meteorologica"
+        type: "string"
+        description: "Variável Meteorológica"
+        required: True
+      - in: "path"
+        name: "file_name"
+        type: "string"
+        description: "Nome do arquivo .json que contenha os Metadados"
+        required: True
+      responses:
+        default:
+          description: "successful operation"
   /area/user/read/{area_id}:
     get:
       tags:
@@ -162,13 +196,13 @@ paths:
       responses:
         default:
           description: "successful operation"
-  /area/metadata/{area_id}/{image_date}/{variavel_meteorologica}/{file_name}":
+  /area/user/metadata/{area_id}/{image_date}/{variavel_meteorologica}/{file_name}":
     get:
       tags:
       - "area"
-      summary: "Recuperar Metadados Imagem"
-      description: "Recuperar Metadados de uma Imagem"
-      operationId: "area-metadata-read"
+      summary: "Recuperar Metadados Imagem Usuários"
+      description: "Recuperar Metadados de uma Imagem para Usuários"
+      operationId: "area-user-metadata-read"
       consumes:
       - "application/json"
       parameters:
@@ -343,7 +377,7 @@ paths:
         - in: "query"
           name: "sigla_uf"
           type: "string"
-          description: "Sigla UF do Estado"
+          description: "Sigla UF do Estado. Ver rotas auxiliáres"
         responses:
           default:
             description: "successful operation"
@@ -404,12 +438,14 @@ definitions:
       ibge_id:
         type: "integer"
         example: 3509502
+        description: "Código IBGE. Ver rotas auxiliáres"
       contrato_id:
         type: "integer"
         example: 1
+        description: "Informar um contrato existente"
       variavel_meteorologica:
         type: "string"
-        description: "Definição da variável meteorológica - Pode ser duas ou mais separadas por vírgulas."
+        description: "Variável Meteorológica. Pode ser duas ou mais separadas por vírgulas. Ver rotas auxiliáres"
         example: "LST_Night_1km,LST_Day_1km,EVI_MODIS,NDVI_MODIS,Evapo_MODIS,CHIRPS"
     required:  
       - nome

@@ -19,5 +19,7 @@ window.onload = function() {
     // }
   });
 
+  // document.getElementsByClassName("topbar")[0].style = "display:none"
+
   //</editor-fold>
 };
