@@ -100,7 +100,7 @@ paths:
       consumes:
       - "application/json"
       parameters:
-      - in: "query"
+      - in: "path"
         name: "area_id"
         type: "string"
         description: "Id da Área"
@@ -118,7 +118,7 @@ paths:
       consumes:
       - "application/json"
       parameters:
-      - in: "query"
+      - in: "path"
         name: "nome"
         type: "string"
         description: "Nome da Área"
@@ -170,7 +170,7 @@ paths:
       consumes:
       - "application/json"
       parameters:
-      - in: "query"
+      - in: "path"
         name: "area_id"
         type: "string"
         description: "Id da Área"
@@ -188,7 +188,7 @@ paths:
       consumes:
       - "application/json"
       parameters:
-      - in: "query"
+      - in: "path"
         name: "nome"
         type: "string"
         description: "Nome da Área"
