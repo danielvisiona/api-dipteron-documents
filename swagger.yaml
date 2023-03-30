@@ -7,7 +7,7 @@ securityDefinitions:
 security:
   - basicAuth: []
 info:
-  description: "Esta é a API Dipteron.  Você pode encontrar mais informações sobre em     Visiona - API Dipteron at [Visiona - API Dipteron](https://github.com/visiona-devteam/gcp-dipteron-api)."
+  description: "Esta é a API Dipteron.  Você pode encontrar mais informações sobre em: [Visiona - API Dipteron](https://github.com/visiona-devteam/gcp-dipteron-api)."
   version: "1.0.0"
   title: "Visiona - API Dipteron"
   termsOfService: ""
@@ -16,8 +16,9 @@ info:
   license:
     name: "MIT License"
     url: "https://github.com/danielvisiona/api-dipteron-documents/blob/main/LICENSE"
+
 host: "localhost:5000"
-# basePath: "/"
+
 tags:
 - name: "area"
   description: "Gerenciamento de Áreas"
@@ -27,74 +28,331 @@ tags:
   description: "Serviços"
 - name: "user"
   description: "Gerenciamento de Usuários"
-- name: "municipio"
-  description: "Auxíliar - Cadastro de Áreas"
-- name: "estado"
-  description: "Auxíliar - Busca de Municípios"
-- name: "variavel"
-  description: "Auxíliar - Cadastro de Áreas"
+- name: "auxiliar"
+  description: "Métodos auxiliares para o cadastro e atualização de Contratos e Áreas"
 
 schemes:
 - "http"
+
 paths:
 # Áreas
   /area/create:
     post:
       tags:
       - "area"
-      summary: "Área Criação"
-      description: "Criação de novas áreas"
-      operationId: "login"
+      summary: "Criar Área"
+      description: "Criar novas áreas"
+      operationId: "area-read"
       consumes:
       - "application/json"
       parameters:
       - in: "body"
         name: "body"
-        description: "Data Area create"
+        description: "Dados para criação de Área"
         required: true
         schema:
           $ref: "#/definitions/Area"
       responses:
         default:
           description: "successful operation"
-  /area/read:
+  /area/delete:
+    delete:
+      tags:
+      - "area"
+      summary: "Deletar Área"
+      description: "Deletar Área existente"
+      operationId: "area-delete"
+      consumes:
+      - "application/json"
+      parameters:
+        - in: "query"
+          name: "area_id"
+          type: "integer"
+          description: "Id da Área"
+          required: True
+      responses:
+        default:
+          description: "successful operation"
+  /area/admin/read:
     get:
       tags:
       - "area"
-      summary: "Área Criação"
-      description: "Criação de novas áreas"
-      operationId: "login"
+      summary: "Recuperar Área(s)"
+      description: "Recuperar dados da(s) Área(s) para Usuários administradores sem observações"
+      operationId: "area-admin-read"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "area_id"
+        type: "string"
+        description: "Id da Área"
+      responses:
+        default:
+          description: "successful operation"
+  /area/admin/read/{area_id}:
+    get:
+      tags:
+      - "area"
+      summary: "Recuperar Área por Id"
+      description: "Recuperar dados por Id de uma Área para Usuários administradores com observações"
+      operationId: "area-admin-read-area_id"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "area_id"
+        type: "string"
+        description: "Id da Área"
+        required: True
+      responses:
+        default:
+          description: "successful operation"
+  /area/admin/read/{nome}:
+    get:
+      tags:
+      - "area"
+      summary: "Recuperar Área por Nome"
+      description: "Recuperar dados por Nome de uma Área para Usuários administradores com observações"
+      operationId: "area-admin-read-nome"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "nome"
+        type: "string"
+        description: "Nome da Área"
+        required: True
+      responses:
+        default:
+          description: "successful operation"
+  /area/user/read/{area_id}:
+    get:
+      tags:
+      - "area"
+      summary: "Recuperar Área por Id"
+      description: "Recuperar dados por Id de uma Área para Usuários com observações"
+      operationId: "area-user-read-area_id"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "area_id"
+        type: "string"
+        description: "Id da Área"
+        required: True
+      responses:
+        default:
+          description: "successful operation"
+  /area/user/read/{nome}:
+    get:
+      tags:
+      - "area"
+      summary: "Recuperar Área por Nome"
+      description: "Recuperar dados por Nome de uma Área para Usuários com observações"
+      operationId: "area-user-read-nome"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "nome"
+        type: "string"
+        description: "Nome da Área"
+        required: True
+      responses:
+        default:
+          description: "successful operation"
+  /area/metadata/{area_id}/{image_date}/{variavel_meteorologica}/{file_name}":
+    get:
+      tags:
+      - "area"
+      summary: "Recuperar Metadados Imagem"
+      description: "Recuperar Metadados de uma Imagem"
+      operationId: "area-metadata-read"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "area_id"
+        type: "string"
+        description: "Id da Área"
+        required: True
+      - in: "path"
+        name: "image_date"
+        type: "string"
+        description: "Data de processamento da imagem Ex.: {2010-10}"
+        required: True
+        format: date
+      - in: "path"
+        name: "variavel_meteorologica"
+        type: "string"
+        description: "Variável Meteorológica"
+        required: True
+      - in: "path"
+        name: "file_name"
+        type: "string"
+        description: "Nome do arquivo .json que contenha os Metadados"
+        required: True
+      responses:
+        default:
+          description: "successful operation"
+
+# Contratos
+  /contrato/create:
+    post:
+      tags:
+      - "contrato"
+      summary: "Contrato Criação"
+      description: "Criação de novos contratos"
+      operationId: "contract-create"
       consumes:
       - "application/json"
       parameters:
       - in: "body"
         name: "body"
-        description: "Data Area create"
+        description: "Dados para criação de novos Contratos"
         required: true
         schema:
-          $ref: "#/definitions/Area"
+          $ref: "#/definitions/Contrato"
       responses:
         default:
           description: "successful operation"
+  /contrato/update:
+    put:
+      tags:
+      - "contrato"
+      summary: "Contrato Atualização"
+      description: "Atualização de Contrato existente"
+      operationId: "contract-update"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Dados para atualização de Contrato"
+        required: true
+        schema:
+          $ref: "#/definitions/ContratoUpdate"
+      responses:
+        default:
+          description: "successful operation"
+  /contrato/read:
+    get:
+      tags:
+      - "contrato"
+      summary: "Recuperar Contrato(s)"
+      description: "Recuperar dados do(s) Contrato(s)"
+      operationId: "contract-read"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "contract_id"
+        type: "string"
+        description: "Id do Contrato"
+      responses:
+        default:
+          description: "successful operation"
+
+# Usuários
+  /user/create:
+    post:
+      tags:
+      - "user"
+      summary: "Usuário Criação"
+      description: "Criação de novos Usuários"
+      operationId: "user-create"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Dados para criação de novos Usuários"
+        required: true
+        schema:
+          $ref: "#/definitions/Usuario"
+      responses:
+        default:
+          description: "successful operation"
+  /user/update:
+    put:
+      tags:
+      - "user"
+      summary: "Atualizar Usuário"
+      description: "Atualizar Usuário existente"
+      operationId: "user-update"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Dados para atualização do Usuário"
+        required: true
+        schema:
+          $ref: "#/definitions/UsuarioUpdate"
+      responses:
+        default:
+          description: "successful operation"
+  /user/delete:
+    delete:
+      tags:
+      - "user"
+      summary: "Deletar Usuário"
+      description: "Deletar Usuário existente"
+      operationId: "user-delete"
+      consumes:
+      - "application/json"
+      parameters:
+        - in: "query"
+          name: "user_id"
+          type: "integer"
+          description: "Id do Usuário"
+          required: True
+      responses:
+        default:
+          description: "successful operation"
+  /user/read:
+    get:
+      tags:
+      - "user"
+      summary: "Recuperar Usuário(s)"
+      description: "Recuperar dados do(s) Usuário(s)"
+      operationId: "user-read"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "user_id"
+        type: "integer"
+        description: "Id do Usuário"
+      responses:
+        default:
+          description: "successful operation"
+
 # Municípios
   /municipio/read:
       get:
         tags:
-        - "municipio"
-        summary: "Municípios do Brasil"
-        description: "Retornar os Municípios do Brasil para auxiliar cadastro das Áreas"
+        - "auxiliar"
+        summary: "Município(s) do Brasil"
+        description: "Retornar o(s) Município(s) do Brasil para auxiliar no cadastro das Áreas"
         operationId: "municipio-read"
         consumes:
         - "application/json"
+        parameters:
+        - in: "query"
+          name: "sigla_uf"
+          type: "string"
+          description: "Sigla UF do Estado"
         responses:
           default:
             description: "successful operation"
   /municipio/read/{ibge_cd}:
       get:
         tags:
-        - "municipio"
+        - "auxiliar"
         summary: "Município do Brasil"
-        description: "Retornar um Município do Brasil para auxiliar cadastro das Áreas"
+        description: "Retornar um Município do Brasil para auxiliar no cadastro das Áreas"
         operationId: "municipio-read-ibge_cd"
         consumes:
         - "application/json"
@@ -107,11 +365,12 @@ paths:
         responses:
           default:
             description: "successful operation"
+
 # Estados
   /estado/read:
     get:
       tags:
-      - "estado"
+      - "auxiliar"
       summary: "Estados do Brasil"
       description: "Retornar os Estados do Brasil para auxiliar na busca dos Municípios"
       operationId: "estado-read"
@@ -120,13 +379,14 @@ paths:
       responses:
         default:
           description: "successful operation"
+
 # Variáveis Meteorológicas
   /variavel/read:
     get:
       tags:
-      - "variavel"
+      - "auxiliar"
       summary: "Variáveis Meteorológicas"
-      description: "Retornar as Variáveis Meteorológicas para auxiliar no cadastro das áreas"
+      description: "Retornar as Variáveis Meteorológicas para auxiliar no cadastro das Áreas"
       operationId: "variavel-read"
       consumes:
       - "application/json"
@@ -156,6 +416,121 @@ definitions:
       - ibge_id
       - contrato_id
       - variavel_meteorologica
+  Contrato:
+    type: "object"
+    properties:
+      nome:
+        type: "string"
+        example: "Visiona - Campinas"
+      dt_inicio:
+        type: "string"
+        example: "2023-01-01"
+        format: date
+      dt_final:
+        type: "string"
+        example: "2023-02-01"
+        format: date
+      qt_meses:
+        type: "integer"
+        example: 2
+        description: "Quantidade de meses retroatívos para a ralização do processamento"
+      st_download:
+        type: "boolean"
+        example: True
+        description: "Permissão ou não pare realizar downloads"
+      limite_ha:
+        type: "integer"
+        example: 200
+        description: "Limite máximo de área para processamento"
+    required:  
+      - nome
+      - dt_inicio
+      - dt_final
+      - qt_meses
+      - st_download
+      - limite_ha
+  ContratoUpdate:
+    type: "object"
+    properties:
+      contract_id:
+        type: "integer"
+        example: 1
+      nome:
+        type: "string"
+        example: "Visiona - Campinas"
+      dt_inicio:
+        type: "string"
+        example: "2023-01-01"
+        format: date
+      dt_final:
+        type: "string"
+        example: "2023-02-01"
+        format: date
+      qt_meses:
+        type: "integer"
+        example: 2
+        description: "Quantidade de meses retroatívos para a ralização do processamento"
+      st_download:
+        type: "boolean"
+        example: True
+        description: "Permissão ou não pare realizar downloads"
+      limite_ha:
+        type: "integer"
+        example: 200
+        description: "Limite máximo de área para processamento"
+    required:  
+      - contract_id
+  Usuario:
+    type: "object"
+    properties:
+      nome:
+        type: "string"
+        example: "Fulano de"
+      sobrenome:
+        type: "string"
+        example: "Tal"
+      email:
+        type: "string"
+        example: "fulano.de.tal@email.com"
+      senha:
+        type: "string"
+        example: "_Senha@123$"
+      contract_id:
+        type: "integer"
+        example: 1
+        description: "Informar um contrato existente"
+    required:  
+      - nome
+      - sobrenome
+      - email
+      - senha
+      - contract_id
+  UsuarioUpdate:
+    type: "object"
+    properties:
+      user_id:
+        type: "integer"
+        example: 5
+      nome:
+        type: "string"
+        example: "Fulano de"
+      sobrenome:
+        type: "string"
+        example: "Tal"
+      email:
+        type: "string"
+        example: "fulano.de.tal@email.com"
+      senha:
+        type: "string"
+        example: "_Senha@123$"
+      contract_id:
+        type: "integer"
+        example: 1
+        description: "Informar um contrato existente"
+    required:  
+      - user_id
+
+      - blue
 
 externalDocs:
   description: "Saiba mais sobre"

@@ -14,9 +14,9 @@ window.onload = function() {
       SwaggerUIBundle.plugins.DownloadUrl
     ],
     layout: "StandaloneLayout",
-    onComplete: function() {
-      ui.preauthorizeBasic("basicAuth", "username", "password");
-    }
+    // onComplete: function() {
+    //   ui.preauthorizeBasic("basicAuth", "username", "password");
+    // }
   });
 
   //</editor-fold>
