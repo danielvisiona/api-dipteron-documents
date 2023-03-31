@@ -363,6 +363,20 @@ paths:
         default:
           description: "successful operation"
 
+# Serviços
+  /servico/start_monitor:
+    get:
+      tags:
+      - "servico"
+      summary: "Iniciar Monitoramento"
+      description: "Iniciar o monitoramento das Áreas, Cloud Scheduler, Usuário Administrador"
+      operationId: "servico-start_monitor"
+      consumes:
+      - "application/json"
+      responses:
+        default:
+          description: "successful operation"
+
 # Municípios
   /municipio/read:
       get:
