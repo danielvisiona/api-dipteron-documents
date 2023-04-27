@@ -15,7 +15,7 @@ info:
     email: "daniel.oliveira@visionaespacial.com.br"
   license:
     name: "MIT License"
-    url: "https://github.com/danielvisiona/api-dipteron-documents/blob/main/LICENSE"
+    url: "https://raw.githubusercontent.com/danielvisiona/api-dipteron-documents/main/LICENSE"
 
 host: "localhost:5000"
 
